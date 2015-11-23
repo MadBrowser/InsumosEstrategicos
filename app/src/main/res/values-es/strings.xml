@@ -10,4 +10,5 @@
     <string name="permission_rationale">"Se requieren permisos para autocompletar la dirección de correo."</string>
     <string name="prompt_email">Dirección de correo</string>
     <string name="prompt_password">Contraseña</string>
+    <string name="message_logout_successfully">Sesión terminada</string>
 </resources>
