@@ -2,7 +2,6 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:gravity="center_horizontal"
               tools:context="cl.colabra.cvilches.insumosestrategicos.LoginActivity">
 
     <!-- Background image -->
@@ -15,24 +14,16 @@
         android:scaleType="fitXY"
         android:src="@drawable/background_image"/>
 
-    <!-- Collahuasi logo -->
-    <ImageView
-        android:id="@+id/collahuasi_logo"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/collahuasi_logo"
-        android:background="@color/backgroundColor"/>
-
     <!-- Main Title -->
     <TextView
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_above="@id/subtitle_text"
+        android:layout_margin="8dp"
+        android:layout_above="@+id/subtitle_text"
+        android:padding="8dp"
         android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:text="SGIE - MÓDULO DE REGISTRO VARIABLE"
         android:textSize="30sp"
         android:textColor="@color/colorAccent"
@@ -42,13 +33,24 @@
         android:id="@+id/subtitle_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
+        android:padding="8dp"
         android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:text="SISTEMA DE GESTIÓN INSUMOS ESTRATÉGICOS"
         android:textSize="25sp"
-        android:textColor="@color/titleText"
-        android:textStyle="bold"/>
+        android:textColor="@color/titleText"/>
+
+    <!-- Collahuasi logo -->
+    <ImageView
+        android:id="@+id/collahuasi_logo"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/collahuasi_logo"
+        android:background="@color/backgroundColor"/>
 
     <!-- Login progress -->
     <ProgressBar
@@ -65,10 +67,10 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@color/backgroundColor"
         android:layout_margin="16dp"
-        android:padding="6dp"
-        android:layout_alignParentBottom="true">
+        android:padding="6dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
