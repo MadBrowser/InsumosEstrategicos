@@ -24,7 +24,7 @@
         android:padding="8dp"
         android:gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:text="SGIE - MÓDULO DE REGISTRO VARIABLE"
+        android:text="@string/app_title"
         android:textSize="30sp"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"/>
@@ -38,7 +38,7 @@
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
-        android:text="SISTEMA DE GESTIÓN INSUMOS ESTRATÉGICOS"
+        android:text="@string/app_subtitle"
         android:textSize="25sp"
         android:textColor="@color/titleText"/>
 
@@ -78,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center_horizontal"
             >
 
             <android.support.design.widget.TextInputLayout
@@ -92,7 +93,7 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="cvilches"/>
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -111,7 +112,7 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="yqon55cx"/>
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
