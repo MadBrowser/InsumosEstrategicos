@@ -7,12 +7,13 @@
     <!-- Background image -->
     <ImageView
         android:id="@+id/background_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="false"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
-        android:src="@drawable/background_image"/>
+        android:src="@drawable/background_image"
+        android:layout_above="@+id/login_form"/>
 
     <!-- Main Title -->
     <TextView
@@ -66,12 +67,12 @@
     <!-- Login form -->
     <ScrollView
         android:id="@+id/login_form"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/backgroundColor"
-        android:layout_margin="16dp"
-        android:padding="6dp">
+        android:padding="16dp"
+        >
 
         <LinearLayout
             android:id="@+id/email_login_form"
