@@ -11,4 +11,6 @@
     <string name="error_incorrect_password">El password ingresado es incorrecto</string>
     <string name="error_field_required">Este campo es obligatorio</string>
     <string name="message_logout_successfully">Sesión Finalizada</string>
+    <string name="app_title">SGIE - MÓDULO DE REGISTRO VARIABLE</string>
+    <string name="app_subtitle">SISTEMA DE GESTIÓN INSUMOS ESTRATÉGICOS</string>
 </resources>
