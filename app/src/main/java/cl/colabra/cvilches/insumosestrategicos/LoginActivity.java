@@ -18,12 +18,14 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.raizlabs.android.dbflow.runtime.TransactionManager;
 
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpPost;
@@ -33,15 +35,22 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.network.InsumosEstrategicos;
 import cl.colabra.cvilches.insumosestrategicos.utils.Config;
 import cl.colabra.cvilches.insumosestrategicos.utils.NetworkUtilities;
@@ -236,8 +245,23 @@ public class LoginActivity extends AppCompatActivity {
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // TODO: Parse response and create DB elements
-                Log.d(TAG, response.toString());
+                try {
+                    JSONArray storeHouseArray = response.getJSONObject("d").getJSONArray("results");
+                    for (int i = 0; i < storeHouseArray.length(); i++) {
+                        JSONObject jsonObject = storeHouseArray.getJSONObject(i);
+                        Storehouse storehouse = new Storehouse(
+                                jsonObject.getLong("ID"),
+                                jsonObject.getString("Desc_Almacen"),
+                                Float.parseFloat(jsonObject.getString("Porcentaje_Stock")),
+                                jsonObject.getString("Semaforo_Stock"),
+                                jsonObject.optString("Ultima_Lectura", "")
+                        );
+                        TransactionManager.getInstance().saveOnSaveQueue(storehouse);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         };
     }
@@ -247,11 +271,14 @@ public class LoginActivity extends AppCompatActivity {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                // TODO: Error parsing
                 Log.d(TAG, error.toString());
+                showProgress(false);
+                Toast.makeText(getApplicationContext(), R.string.get_storehouse_list_error, Toast.LENGTH_SHORT)
+                        .show();
             }
         };
     }
-
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -328,12 +355,12 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
 
             if (success) {
                 getStorehousesList();
             } else {
                 // TODO: Get the error from the SOAP request and show that message
+                showProgress(false);
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
