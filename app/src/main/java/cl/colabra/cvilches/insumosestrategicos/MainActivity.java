@@ -3,6 +3,7 @@ package cl.colabra.cvilches.insumosestrategicos;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -33,10 +34,11 @@ import com.raizlabs.android.dbflow.sql.queriable.ModelQueriable;
 
 import java.util.List;
 
+import cl.colabra.cvilches.insumosestrategicos.fragments.DailyPlanFragment;
 import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DailyPlanFragment.OnDailyPlanFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -60,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Storehouse> mStorehouseList;
 
+    // Application fragments
+    private DailyPlanFragment mDailyPlanFragment;
+
     private static final String TAG = "SGIE_Main";
 
     @Override
@@ -82,16 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         getStoreListFromDB();
     }
@@ -144,6 +139,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Listado obtenido desde la DB");
             }
         };
+    }
+
+    @Override
+    public void onDailyPlanCreated(Uri uri) {
+
     }
 
     /**
@@ -219,7 +219,11 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return PlaceholderFragment.newInstance(position + 1);
+                    if (mDailyPlanFragment == null) {
+                        return DailyPlanFragment.newInstance(mStorehouseList);
+                    } else {
+                        return mDailyPlanFragment;
+                    }
                 case 1:
                     return PlaceholderFragment.newInstance(position + 1);
                 case 2:
