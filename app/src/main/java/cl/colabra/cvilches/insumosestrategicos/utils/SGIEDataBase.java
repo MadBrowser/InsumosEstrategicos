@@ -9,7 +9,7 @@ import com.raizlabs.android.dbflow.annotation.Database;
  */
 @Database(name = SGIEDataBase.NAME, version = SGIEDataBase.VERSION)
 public class SGIEDataBase {
-    public static final String NAME = "cl.colabra.SGIE";
+    public static final String NAME = "ColabraSGIE";
 
     public static final int VERSION = 1;
 }
