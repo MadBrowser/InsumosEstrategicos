@@ -80,6 +80,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Sets up Session Manager
+        sessionManager = new SessionManager(this);
+
+        if (sessionManager.isLoggedIn()) {
+            startMainActivity();
+        }
+
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.username);
 
@@ -105,9 +113,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-        // Sets up Session Manager
-        sessionManager = new SessionManager(this);
     }
 
     /**
