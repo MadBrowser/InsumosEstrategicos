@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
         mUsernameView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
+        // Storehouse values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -201,15 +201,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /* Volley request for getting the stores list */
-    private void getStoresList() {
-
-        /*CookieManager defaultManager = (CookieManager) CookieHandler.getDefault();
-        defaultManager.getCookieStore();*/
+    private void getStorehousesList() {
 
         // Set Url
         String mUrl = Uri.parse(Config.getServerUrl())
                 .buildUpon()
-                .path(Config.getStoresListUrl())
+                .path(Config.getStorehousesListUrl())
                 .build().toString();
 
         // Set Session Cookie
@@ -334,7 +331,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                getStoresList();
+                getStorehousesList();
             } else {
                 // TODO: Get the error from the SOAP request and show that message
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
