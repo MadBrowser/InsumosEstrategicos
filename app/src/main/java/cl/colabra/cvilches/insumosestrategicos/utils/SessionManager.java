@@ -68,16 +68,6 @@ public class SessionManager {
     }
 
     /**
-     * checkLogin method wil check user login status
-     * If false it will redirect user to LoginActivity
-     * Else won't do anything
-     */
-    public boolean checkLogin() {
-        // Check login status
-        return this.isLoggedIn();
-    }
-
-    /**
      * Get stored session data
      */
     public HashMap<String, String> getUserDetails() {
@@ -87,6 +77,9 @@ public class SessionManager {
 
         // User auth
         user.put(KEY_PASSWORD, mSharedPreferences.getString(KEY_PASSWORD, null));
+
+        // User auth
+        user.put(FED_AUTH, mSharedPreferences.getString(FED_AUTH, null));
 
         // return user
         return user;
