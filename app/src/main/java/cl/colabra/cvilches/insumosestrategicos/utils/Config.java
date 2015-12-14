@@ -8,7 +8,7 @@ package cl.colabra.cvilches.insumosestrategicos.utils;
 public abstract class Config {
 
     // Lists Names
-    private static final String STORE_LIST_NAME = "Maestro Almacenes";
+    private static final String STOREHOUSE_LIST_NAME = "Maestro Almacenes";
 
     // Server URLs
     private static final String SERVER_URL = "http://collahuasinew2.colabra.cl";
@@ -40,7 +40,7 @@ public abstract class Config {
         return CHARSET_UTF8;
     }
 
-    public static String getStoresListUrl() {
-        return String.format(LIST_ITEMS_URL, STORE_LIST_NAME);
+    public static String getStorehousesListUrl() {
+        return String.format(LIST_ITEMS_URL, STOREHOUSE_LIST_NAME);
     }
 }

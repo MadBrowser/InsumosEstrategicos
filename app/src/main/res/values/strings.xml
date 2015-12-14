@@ -13,4 +13,6 @@
     <string name="message_logout_successfully">Sesión Finalizada</string>
     <string name="app_title">SGIE - MÓDULO DE REGISTRO VARIABLE</string>
     <string name="app_subtitle">SISTEMA DE GESTIÓN INSUMOS ESTRATÉGICOS</string>
+    <string name="get_storehouse_list_error">No fue posible obtener el listado de almacenes,
+        por favor intenta más tarde.</string>
 </resources>

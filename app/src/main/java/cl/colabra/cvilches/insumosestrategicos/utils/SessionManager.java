@@ -24,8 +24,6 @@ public class SessionManager {
     // Shared mSharedPreferences mode
     int PRIVATE_MODE = 0;
 
-    private static final String TAG = "SGIE_SessionManager";
-
     // Shared mSharedPreferences file name
     private static final String PREF_NAME = "SGIEPref";
 
@@ -52,15 +50,18 @@ public class SessionManager {
     /**
      * Stores login credentials in Shared prefs
      */
-    public void createLoginSession(String name, String password) {
+    public void createLoginSession(String name, String password, HttpCookie cookie) {
         // Storing login value as TRUE
         mEditor.putBoolean(IS_LOGGED_IN, true);
 
         // Storing name in mSharedPreferences
         mEditor.putString(KEY_USER_NAME, name);
 
-        // Storing auth in mSharedPreferences
+        // Storing password in mSharedPreferences
         mEditor.putString(KEY_PASSWORD, password);
+
+        // Storing Session Cookie
+        mEditor.putString(FED_AUTH, cookie.getValue());
 
         // commit changes
         mEditor.commit();
@@ -121,12 +122,7 @@ public class SessionManager {
         return mSharedPreferences.getBoolean(IS_LOGGED_IN, false);
     }
 
-    public void saveSessionCookie(HttpCookie cookie) {
-        mEditor.putString(FED_AUTH, cookie.getValue());
-        mEditor.apply();
-    }
-
-    public String getSessionCookie() {
-        return NetworkUtilities.getSessionString(mSharedPreferences.getString(FED_AUTH, ""));
+    public String getSessionValue() {
+        return mSharedPreferences.getString(FED_AUTH, "");
     }
 }

@@ -18,12 +18,14 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.raizlabs.android.dbflow.runtime.TransactionManager;
 
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpPost;
@@ -33,14 +35,22 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.network.InsumosEstrategicos;
 import cl.colabra.cvilches.insumosestrategicos.utils.Config;
 import cl.colabra.cvilches.insumosestrategicos.utils.NetworkUtilities;
@@ -113,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         mUsernameView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
+        // Storehouse values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -200,23 +210,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /* Volley request for getting the stores list */
-    private void getStoresList() {
-
-        /*CookieManager defaultManager = (CookieManager) CookieHandler.getDefault();
-        defaultManager.getCookieStore();*/
+    private void getStorehousesList() {
 
         // Set Url
         String mUrl = Uri.parse(Config.getServerUrl())
                 .buildUpon()
-                .path(Config.getStoresListUrl())
+                .path(Config.getStorehousesListUrl())
                 .build().toString();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, mUrl,
+        // Set Session Cookie
+        final String sessionString = NetworkUtilities.getSessionString(sessionManager
+                .getSessionValue());
+
+        // Create request
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, mUrl,
                 successListener(), errorListener()) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Cookie", sessionManager.getSessionCookie());
+                headers.put("Cookie", sessionString);
                 headers.put("Accept", Config.getContentJson());
                 return headers;
             }
@@ -225,15 +237,31 @@ public class LoginActivity extends AppCompatActivity {
         // Set tag for Login requests
         stringRequest.setTag(TAG);
         // With the request created, simply add it to our Application's RequestQueue
-        InsumosEstrategicos.getInstance(this).getRequestQueue().add(stringRequest);
+        InsumosEstrategicos.getInstance().getRequestQueue().add(stringRequest);
+
     }
 
-    private Response.Listener<String> successListener() {
-        return new Response.Listener<String>() {
+    private Response.Listener<JSONObject> successListener() {
+        return new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                // TODO: Parse response and create DB elements
-                Log.d(TAG, response);
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray storeHouseArray = response.getJSONObject("d").getJSONArray("results");
+                    for (int i = 0; i < storeHouseArray.length(); i++) {
+                        JSONObject jsonObject = storeHouseArray.getJSONObject(i);
+                        Storehouse storehouse = new Storehouse(
+                                jsonObject.getLong("ID"),
+                                jsonObject.getString("Desc_Almacen"),
+                                Float.parseFloat(jsonObject.getString("Porcentaje_Stock")),
+                                jsonObject.getString("Semaforo_Stock"),
+                                jsonObject.optString("Ultima_Lectura", "")
+                        );
+                        TransactionManager.getInstance().saveOnSaveQueue(storehouse);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         };
     }
@@ -243,11 +271,14 @@ public class LoginActivity extends AppCompatActivity {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                // TODO: Error parsing
                 Log.d(TAG, error.toString());
+                showProgress(false);
+                Toast.makeText(getApplicationContext(), R.string.get_storehouse_list_error, Toast.LENGTH_SHORT)
+                        .show();
             }
         };
     }
-
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -311,14 +342,12 @@ public class LoginActivity extends AppCompatActivity {
             HttpCookie javaCookie = NetworkUtilities.getHttpCookie(
                     httpClient.getCookieStore().getCookies().get(0));
             java.net.URI javaUri = java.net.URI.create(Config.getServerUrl());
-            // Add Cookie Manager
-            CookieManager manager = new CookieManager();
-            CookieHandler.setDefault(manager);
+
             CookieManager defaultManager = (CookieManager) CookieHandler.getDefault();
             defaultManager.getCookieStore().add(javaUri, javaCookie);
 
             // Saves Cookie in SessionManager
-            sessionManager.saveSessionCookie(javaCookie);
+            sessionManager.createLoginSession(mUsername, mPassword, javaCookie);
 
             return true;
         }
@@ -326,12 +355,12 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
 
             if (success) {
-                getStoresList();
+                getStorehousesList();
             } else {
                 // TODO: Get the error from the SOAP request and show that message
+                showProgress(false);
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }

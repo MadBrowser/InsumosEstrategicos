@@ -1,29 +1,44 @@
 package cl.colabra.cvilches.insumosestrategicos.network;
 
+import android.app.Application;
 import android.content.Context;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.raizlabs.android.dbflow.config.FlowManager;
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
 
 import cl.colabra.cvilches.insumosestrategicos.utils.NukeSSLCerts;
 
-public class InsumosEstrategicos {
+public class InsumosEstrategicos extends Application {
     private static InsumosEstrategicos mInstance;
     private RequestQueue mRequestQueue;
     private static Context mCtx;
 
-    private InsumosEstrategicos(Context context) {
-        mCtx = context;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        mCtx = getApplicationContext();
+
         mRequestQueue = getRequestQueue();
 
-        // This instruction is for accepting all certificates
+        // Add this line in order to accept all certificates
         NukeSSLCerts.nuke();
+
+        // Add Cookie Manager
+        CookieManager manager = new CookieManager();
+        CookieHandler.setDefault(manager);
+
+        // DB Flow Set-up
+        FlowManager.init(this);
     }
 
-    public static synchronized InsumosEstrategicos getInstance(Context context) {
+    public static synchronized InsumosEstrategicos getInstance() {
         if (mInstance == null) {
-            mInstance = new InsumosEstrategicos(context);
+            mInstance = new InsumosEstrategicos();
         }
         return mInstance;
     }
@@ -32,12 +47,9 @@ public class InsumosEstrategicos {
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
-            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+            mRequestQueue = Volley.newRequestQueue(mCtx);
         }
         return mRequestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
-    }
 }
