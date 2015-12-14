@@ -212,12 +212,17 @@ public class LoginActivity extends AppCompatActivity {
                 .path(Config.getStoresListUrl())
                 .build().toString();
 
+        // Set Session Cookie
+        final String sessionString = NetworkUtilities.getSessionString(sessionManager
+                .getSessionValue());
+
+        // Create request
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, mUrl,
                 successListener(), errorListener()) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Cookie", sessionManager.getSessionCookie());
+                headers.put("Cookie", sessionString);
                 headers.put("Accept", Config.getContentJson());
                 return headers;
             }
@@ -318,7 +323,7 @@ public class LoginActivity extends AppCompatActivity {
             defaultManager.getCookieStore().add(javaUri, javaCookie);
 
             // Saves Cookie in SessionManager
-            sessionManager.saveSessionCookie(javaCookie);
+            sessionManager.createLoginSession(mUsername, mPassword, javaCookie);
 
             return true;
         }
