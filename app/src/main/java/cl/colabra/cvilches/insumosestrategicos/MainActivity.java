@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +24,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.games.GamesMetadata;
+import com.raizlabs.android.dbflow.runtime.TransactionManager;
+import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
+import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
+import com.raizlabs.android.dbflow.sql.language.Select;
+import com.raizlabs.android.dbflow.sql.queriable.ModelQueriable;
+
+import java.util.List;
+
+import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,14 +56,18 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The Session Manager class
      */
-    private SessionManager sessionManager;
+    private SessionManager mSessionManager;
+
+    private List<Storehouse> mStorehouseList;
+
+    private static final String TAG = "SGIE_Main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sessionManager = new SessionManager(this);
+        mSessionManager = new SessionManager(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -78,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getStoreListFromDB();
     }
 
     @Override
@@ -99,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else*/
         if (id == R.id.action_logout) {
-            sessionManager.logoutUser();
+            mSessionManager.logoutUser();
             startLoginActivity();
             return true;
         }
@@ -111,6 +127,23 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void getStoreListFromDB() {
+        ModelQueriable<Storehouse> query = new Select().from(Storehouse.class);
+        TransactionManager.getInstance().addTransaction(new SelectListTransaction<>(
+                query, getStoresTransactionListenerAdapter()
+        ));
+    }
+
+    private TransactionListenerAdapter<List<Storehouse>> getStoresTransactionListenerAdapter() {
+        return new TransactionListenerAdapter<List<Storehouse>>() {
+            @Override
+            public void onResultReceived(List<Storehouse> storehouses) {
+                mStorehouseList = storehouses;
+                Log.d(TAG, "Listado obtenido desde la DB");
+            }
+        };
     }
 
     /**
@@ -184,9 +217,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return PlaceholderFragment.newInstance(position + 1);
+                case 1:
+                    return PlaceholderFragment.newInstance(position + 1);
+                case 2:
+                    return PlaceholderFragment.newInstance(position + 1);
+                default:
+                    return PlaceholderFragment.newInstance(position + 1);
+            }
         }
 
         @Override
