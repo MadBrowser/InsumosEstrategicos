@@ -5,8 +5,6 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-import java.util.Date;
-
 import cl.colabra.cvilches.insumosestrategicos.utils.SGIEDataBase;
 
 /**
@@ -36,9 +34,14 @@ public class Storehouse extends BaseModel {
     private String stockLight;
 
     @Column
-    private Date lastReading;
+    private String lastReading;
 
-    public Storehouse(long id, String description, float percentageStock, String stockLight, Date lastReading) {
+    // Empty constructor required for DB Flow
+    public Storehouse () {
+
+    }
+
+    public Storehouse(long id, String description, float percentageStock, String stockLight, String lastReading) {
         this.id = id;
         this.description = description;
         this.percentageStock = percentageStock;
@@ -48,6 +51,10 @@ public class Storehouse extends BaseModel {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(Long Id) {
+        this.id = id;
     }
 
     public String getDescription() {
@@ -74,11 +81,11 @@ public class Storehouse extends BaseModel {
         this.stockLight = stockLight;
     }
 
-    public Date getLastReading() {
+    public String getLastReading() {
         return lastReading;
     }
 
-    public void setLastReading(Date lastReading) {
+    public void setLastReading(String lastReading) {
         this.lastReading = lastReading;
     }
 }
