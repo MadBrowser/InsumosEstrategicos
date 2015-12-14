@@ -3,6 +3,7 @@ package cl.colabra.cvilches.insumosestrategicos;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -258,7 +259,7 @@ public class LoginActivity extends AppCompatActivity {
                         );
                         TransactionManager.getInstance().saveOnSaveQueue(storehouse);
                     }
-
+                    startMainActivity();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -278,6 +279,12 @@ public class LoginActivity extends AppCompatActivity {
                         .show();
             }
         };
+    }
+
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
