@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
+import java.net.HttpCookie;
 import java.util.HashMap;
 
 import cl.colabra.cvilches.insumosestrategicos.LoginActivity;
@@ -36,6 +37,10 @@ public class SessionManager {
 
     // Auth value (make variable public to access from outside)
     public static final String KEY_PASSWORD = "cl.colabra.KEY_PASSWORD";
+
+    // Auth cookie
+    public static final String FED_AUTH = "cl.colabra.FED_AUTH";
+    public static final String FED_AUTH_NAME = "FedAuth";
 
     // Constructor
     public SessionManager(Activity activity) {
@@ -115,5 +120,14 @@ public class SessionManager {
     // Get Login State
     public boolean isLoggedIn() {
         return mSharedPreferences.getBoolean(IS_LOGGED_IN, false);
+    }
+
+    public void saveSessionCookie(HttpCookie cookie) {
+        mEditor.putString(FED_AUTH, cookie.getValue());
+        mEditor.apply();
+    }
+
+    public String getSessionCookie() {
+        return mSharedPreferences.getString(FED_AUTH, "");
     }
 }

@@ -3,9 +3,11 @@ package cl.colabra.cvilches.insumosestrategicos;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
@@ -15,6 +17,28 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.HttpCookie;
+
+import cl.colabra.cvilches.insumosestrategicos.utils.Config;
+import cl.colabra.cvilches.insumosestrategicos.utils.NetworkUtilities;
+import cl.colabra.cvilches.insumosestrategicos.utils.SOAPUtils;
+import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
 /**
  * A login screen that offers login via username/password.
@@ -28,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    // Session Manager
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +85,9 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        // Sets up Session Manager
+        sessionManager = new SessionManager(this);
     }
 
     /**
@@ -99,7 +129,8 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        if (cancel) {
+        // if (cancel) {
+        if (false) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
@@ -168,13 +199,68 @@ public class LoginActivity extends AppCompatActivity {
         private final String mPassword;
 
         UserLoginTask(String username, String password) {
-            mUsername = username;
-            mPassword = password;
+            /*mUsername = username;
+            mPassword = password;*/
+            mUsername = "fba";
+            mPassword = "Colabra5900+";
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: Authentication against SOAP
+            // Allows the use of not thread safe deprecated apache HTTP library
+            // Sadly this is necessary in order to make SOAP calls
+            // TODO: Find another way to get the authentication cookie
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            // Set http params
+            HttpParams httpParams = new BasicHttpParams();
+            httpParams.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+            int timeoutConnection = Config.getDefaultTimeout();
+            HttpConnectionParams.setConnectionTimeout(httpParams, timeoutConnection);
+            int timeoutSocket = Config.getDefaultTimeout();
+            HttpConnectionParams.setSoTimeout(httpParams, timeoutSocket);
+            DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
+
+            // Set http request
+            String loginUrl = Uri.parse(Config.getServerUrl())
+                    .buildUpon()
+                    .path(SOAPUtils.getLoginUrl())
+                    .build()
+                    .toString();
+            HttpPost httpPost = new HttpPost(loginUrl);
+            httpPost.addHeader("SOAPAction", SOAPUtils.getActionLogin());
+            httpPost.addHeader("Content-Type", Config.getContentXml());
+
+            // Variable in which to save the response
+            String responseBody = "";
+
+            try {
+                // Set the SOAP Entity
+                String soapEnvelope = SOAPUtils.getLoginEnvelope(this.mUsername, this.mPassword);
+                httpPost.setEntity(new StringEntity(soapEnvelope, Config.getCharsetUtf8()));
+
+                // Execute the request
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+                responseBody = EntityUtils.toString(httpEntity);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Creates cookie in HttpCookieHandler for use in Volley request
+            HttpCookie javaCookie = NetworkUtilities.getHttpCookie(
+                    httpClient.getCookieStore().getCookies().get(0));
+            java.net.URI javaUri = java.net.URI.create(Config.getServerUrl());
+            // Add Cookie Manager
+            CookieManager manager = new CookieManager();
+            CookieHandler.setDefault(manager);
+            CookieManager defaultManager = (CookieManager) CookieHandler.getDefault();
+            defaultManager.getCookieStore().add(javaUri, javaCookie);
+
+            // Saves Cookie in SessionManager
+            sessionManager.saveSessionCookie(javaCookie);
+
             return true;
         }
 

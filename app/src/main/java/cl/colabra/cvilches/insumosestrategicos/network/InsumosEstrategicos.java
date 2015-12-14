@@ -6,9 +6,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-
 import cl.colabra.cvilches.insumosestrategicos.utils.NukeSSLCerts;
 
 public class InsumosEstrategicos {
@@ -20,6 +17,7 @@ public class InsumosEstrategicos {
         mCtx = context;
         mRequestQueue = getRequestQueue();
 
+        // This instruction is for accepting all certificates
         NukeSSLCerts.nuke();
     }
 
@@ -32,8 +30,6 @@ public class InsumosEstrategicos {
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
-            CookieManager manager = new CookieManager();
-            CookieHandler.setDefault(manager);
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
             mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
@@ -44,5 +40,4 @@ public class InsumosEstrategicos {
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
     }
-
 }
