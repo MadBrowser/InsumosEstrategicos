@@ -23,7 +23,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpPost;
@@ -33,6 +33,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.CookieHandler;
@@ -211,7 +212,7 @@ public class LoginActivity extends AppCompatActivity {
                 .path(Config.getStoresListUrl())
                 .build().toString();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, mUrl,
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, mUrl,
                 successListener(), errorListener()) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -225,15 +226,16 @@ public class LoginActivity extends AppCompatActivity {
         // Set tag for Login requests
         stringRequest.setTag(TAG);
         // With the request created, simply add it to our Application's RequestQueue
-        InsumosEstrategicos.getInstance(this).getRequestQueue().add(stringRequest);
+        InsumosEstrategicos.getInstance().getRequestQueue().add(stringRequest);
+
     }
 
-    private Response.Listener<String> successListener() {
-        return new Response.Listener<String>() {
+    private Response.Listener<JSONObject> successListener() {
+        return new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(JSONObject response) {
                 // TODO: Parse response and create DB elements
-                Log.d(TAG, response);
+                Log.d(TAG, response.toString());
             }
         };
     }
@@ -311,9 +313,7 @@ public class LoginActivity extends AppCompatActivity {
             HttpCookie javaCookie = NetworkUtilities.getHttpCookie(
                     httpClient.getCookieStore().getCookies().get(0));
             java.net.URI javaUri = java.net.URI.create(Config.getServerUrl());
-            // Add Cookie Manager
-            CookieManager manager = new CookieManager();
-            CookieHandler.setDefault(manager);
+
             CookieManager defaultManager = (CookieManager) CookieHandler.getDefault();
             defaultManager.getCookieStore().add(javaUri, javaCookie);
 
