@@ -44,10 +44,6 @@ import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,10 +80,6 @@ public class LoginActivity extends AppCompatActivity {
         // Sets up Session Manager
         sessionManager = new SessionManager(this);
 
-        if (sessionManager.isLoggedIn()) {
-            startMainActivity();
-        }
-
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.username);
 
@@ -113,6 +105,11 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        if (sessionManager.isLoggedIn()) {
+            showProgress(true);
+            getStorehousesList();
+        }
     }
 
     /**
@@ -280,7 +277,8 @@ public class LoginActivity extends AppCompatActivity {
                 // TODO: Error parsing
                 Log.d(TAG, error.toString());
                 showProgress(false);
-                Toast.makeText(getApplicationContext(), R.string.get_storehouse_list_error, Toast.LENGTH_SHORT)
+                Toast.makeText(getApplicationContext(),
+                        R.string.get_storehouse_list_error, Toast.LENGTH_LONG)
                         .show();
             }
         };

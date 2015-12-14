@@ -53,7 +53,7 @@ public class Storehouse extends BaseModel {
         return id;
     }
 
-    public void setId(Long Id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -88,4 +88,5 @@ public class Storehouse extends BaseModel {
     public void setLastReading(String lastReading) {
         this.lastReading = lastReading;
     }
+
 }
