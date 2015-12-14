@@ -1,9 +1,5 @@
 package cl.colabra.cvilches.insumosestrategicos.utils;
 
-import org.apache.http.cookie.Cookie;
-
-import java.net.HttpCookie;
-
 /**
  * Project: InsumosEstrategicos.
  * Created by Carlos Vilches on 12/10/15. By appointment

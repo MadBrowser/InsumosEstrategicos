@@ -11,6 +11,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,8 +19,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -28,13 +33,15 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
+import java.util.HashMap;
+import java.util.Map;
 
+import cl.colabra.cvilches.insumosestrategicos.network.InsumosEstrategicos;
 import cl.colabra.cvilches.insumosestrategicos.utils.Config;
 import cl.colabra.cvilches.insumosestrategicos.utils.NetworkUtilities;
 import cl.colabra.cvilches.insumosestrategicos.utils.SOAPUtils;
@@ -44,6 +51,8 @@ import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
  * A login screen that offers login via username/password.
  */
 public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = "SGIE_Login";
 
     private UserLoginTask mAuthTask = null;
 
@@ -129,8 +138,8 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        // if (cancel) {
-        if (false) {
+        if (cancel) cancel = false;
+        if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
@@ -138,7 +147,8 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(username, password);
+            /*mAuthTask = new UserLoginTask(username, password);*/
+            mAuthTask = new UserLoginTask();
             mAuthTask.execute((Void) null);
         }
     }
@@ -189,6 +199,56 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /* Volley request for getting the stores list */
+    private void getStoresList() {
+
+        /*CookieManager defaultManager = (CookieManager) CookieHandler.getDefault();
+        defaultManager.getCookieStore();*/
+
+        // Set Url
+        String mUrl = Uri.parse(Config.getServerUrl())
+                .buildUpon()
+                .path(Config.getStoresListUrl())
+                .build().toString();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, mUrl,
+                successListener(), errorListener()) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Cookie", sessionManager.getSessionCookie());
+                headers.put("Accept", Config.getContentJson());
+                return headers;
+            }
+        };
+
+        // Set tag for Login requests
+        stringRequest.setTag(TAG);
+        // With the request created, simply add it to our Application's RequestQueue
+        InsumosEstrategicos.getInstance(this).getRequestQueue().add(stringRequest);
+    }
+
+    private Response.Listener<String> successListener() {
+        return new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                // TODO: Parse response and create DB elements
+                Log.d(TAG, response);
+            }
+        };
+    }
+
+
+    private Response.ErrorListener errorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, error.toString());
+            }
+        };
+    }
+
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -198,9 +258,12 @@ public class LoginActivity extends AppCompatActivity {
         private final String mUsername;
         private final String mPassword;
 
-        UserLoginTask(String username, String password) {
-            /*mUsername = username;
-            mPassword = password;*/
+        /*UserLoginTask(String username, String password) {
+            mUsername = username;
+            mPassword = password;
+        }*/
+
+        UserLoginTask() {
             mUsername = "fba";
             mPassword = "Colabra5900+";
         }
@@ -232,23 +295,19 @@ public class LoginActivity extends AppCompatActivity {
             httpPost.addHeader("SOAPAction", SOAPUtils.getActionLogin());
             httpPost.addHeader("Content-Type", Config.getContentXml());
 
-            // Variable in which to save the response
-            String responseBody = "";
-
             try {
                 // Set the SOAP Entity
                 String soapEnvelope = SOAPUtils.getLoginEnvelope(this.mUsername, this.mPassword);
                 httpPost.setEntity(new StringEntity(soapEnvelope, Config.getCharsetUtf8()));
 
                 // Execute the request
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                HttpEntity httpEntity = httpResponse.getEntity();
-                responseBody = EntityUtils.toString(httpEntity);
+                httpClient.execute(httpPost);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             // Creates cookie in HttpCookieHandler for use in Volley request
+            // TODO: Validate error request so that doesn't return true
             HttpCookie javaCookie = NetworkUtilities.getHttpCookie(
                     httpClient.getCookieStore().getCookies().get(0));
             java.net.URI javaUri = java.net.URI.create(Config.getServerUrl());
@@ -270,8 +329,9 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                finish();
+                getStoresList();
             } else {
+                // TODO: Get the error from the SOAP request and show that message
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
@@ -283,5 +343,6 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
         }
     }
+
 }
 

@@ -11,6 +11,12 @@ import java.net.HttpCookie;
  */
 public abstract class NetworkUtilities {
 
+    // Session cookie name
+    public static final String SESSION_COOKIE_NAME = "FedAuth";
+
+    // Cookie String format
+    public static final String COOKIE_FORMAT = "%s=%s";
+
     /**
      * Returns HttpCookie from org.apache.http.cookie.Cookie
      */
@@ -18,4 +24,7 @@ public abstract class NetworkUtilities {
         return new HttpCookie(cookie.getName(), cookie.getValue());
     }
 
+    public static String getSessionString(String cookieValue) {
+        return String.format(COOKIE_FORMAT, SESSION_COOKIE_NAME, cookieValue);
+    }
 }

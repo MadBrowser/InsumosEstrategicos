@@ -38,9 +38,8 @@ public class SessionManager {
     // Auth value (make variable public to access from outside)
     public static final String KEY_PASSWORD = "cl.colabra.KEY_PASSWORD";
 
-    // Auth cookie
+    // Auth cookie value
     public static final String FED_AUTH = "cl.colabra.FED_AUTH";
-    public static final String FED_AUTH_NAME = "FedAuth";
 
     // Constructor
     public SessionManager(Activity activity) {
@@ -128,6 +127,6 @@ public class SessionManager {
     }
 
     public String getSessionCookie() {
-        return mSharedPreferences.getString(FED_AUTH, "");
+        return NetworkUtilities.getSessionString(mSharedPreferences.getString(FED_AUTH, ""));
     }
 }

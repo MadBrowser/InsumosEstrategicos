@@ -7,12 +7,17 @@ package cl.colabra.cvilches.insumosestrategicos.utils;
  */
 public abstract class Config {
 
+    // Lists Names
+    private static final String STORE_LIST_NAME = "Maestro Almacenes";
+
     // Server URLs
     private static final String SERVER_URL = "http://collahuasinew2.colabra.cl";
+    private static final String LIST_ITEMS_URL = "/_api/Web/Lists/GetByTitle('%s')/Items";
 
     // Connection parameters
     private static final int DEFAULT_TIMEOUT = 16000;
     private static final String CONTENT_XML = "text/xml";
+    private static final String CONTENT_JSON = "application/json;odata=verbose";
     private static final String CHARSET_UTF8 = "UTF-8";
 
     public static String getServerUrl(){
@@ -27,7 +32,15 @@ public abstract class Config {
         return CONTENT_XML;
     }
 
+    public static String getContentJson() {
+        return CONTENT_JSON;
+    }
+
     public static String getCharsetUtf8() {
         return CHARSET_UTF8;
+    }
+
+    public static String getStoresListUrl() {
+        return String.format(LIST_ITEMS_URL, STORE_LIST_NAME);
     }
 }
