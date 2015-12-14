@@ -6,6 +6,7 @@ import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -31,6 +32,9 @@ public class InsumosEstrategicos extends Application {
         // Add Cookie Manager
         CookieManager manager = new CookieManager();
         CookieHandler.setDefault(manager);
+
+        // DB Flow Set-up
+        FlowManager.init(this);
     }
 
     public static synchronized InsumosEstrategicos getInstance() {
@@ -48,8 +52,5 @@ public class InsumosEstrategicos extends Application {
         }
         return mRequestQueue;
     }
-
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
-    }
+    
 }
