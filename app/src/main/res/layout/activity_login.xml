@@ -2,18 +2,46 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:gravity="center_horizontal"
               tools:context="cl.colabra.cvilches.insumosestrategicos.LoginActivity">
 
     <!-- Background image -->
     <ImageView
         android:id="@+id/background_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="false"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
-        android:src="@drawable/background_image"/>
+        android:src="@drawable/background_image"
+        android:layout_above="@+id/login_form"/>
+
+    <!-- Main Title -->
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_above="@+id/subtitle_text"
+        android:padding="8dp"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:text="@string/app_title"
+        android:textSize="30sp"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/subtitle_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:text="@string/app_subtitle"
+        android:textSize="25sp"
+        android:textColor="@color/titleText"/>
 
     <!-- Collahuasi logo -->
     <ImageView
@@ -25,31 +53,6 @@
         android:src="@drawable/collahuasi_logo"
         android:background="@color/backgroundColor"/>
 
-    <!-- Main Title -->
-    <TextView
-        android:id="@+id/title_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_above="@id/subtitle_text"
-        android:gravity="center_horizontal"
-        android:text="SGIE - MÓDULO DE REGISTRO VARIABLE"
-        android:textSize="30sp"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/subtitle_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_centerInParent="true"
-        android:gravity="center_horizontal"
-        android:text="SISTEMA DE GESTIÓN INSUMOS ESTRATÉGICOS"
-        android:textSize="25sp"
-        android:textColor="@color/titleText"
-        android:textStyle="bold"/>
-
     <!-- Login progress -->
     <ProgressBar
         android:id="@+id/login_progress"
@@ -57,38 +60,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/subtitle_text"
         android:visibility="gone"/>
 
     <!-- Login form -->
     <ScrollView
         android:id="@+id/login_form"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@color/backgroundColor"
-        android:layout_margin="16dp"
-        android:padding="6dp"
-        android:layout_alignParentBottom="true">
+        android:padding="16dp"
+        >
 
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center_horizontal"
             >
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
-                    android:id="@+id/email"
+                <EditText
+                    android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
+                    android:hint="@string/prompt_username"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -106,18 +112,37 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
+            <android.support.v7.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold"/>
+                android:layout_marginTop="@dimen/button_vertical_margin"
+                android:layout_marginBottom="@dimen/button_horizontal_margin"
+                card_view:cardBackgroundColor="@color/colorPrimary"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="6dp"
+                >
+
+                <TextView android:id="@+id/button_text"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:gravity="center_horizontal"
+                          android:paddingTop="8dp"
+                          android:paddingBottom="8dp"
+                          android:paddingLeft="12dp"
+                          android:paddingRight="12dp"
+                          android:textColor="@color/titleText"
+                          android:textSize="@dimen/button_text_size"
+                          android:text="@string/action_sign_in"
+                    />
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
     </ScrollView>
