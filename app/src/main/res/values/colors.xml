@@ -12,4 +12,9 @@
     <color name="divider">#B6B6B6</color>
     <color name="backgroundColor">#FFFFFF</color>
 
+    <!-- Stock Lights Colors-->
+    <color name="stockLightRed">#D32F2F</color>
+    <color name="stockLightYellow">#FFA000</color>
+    <color name="stockLightGreen">#00796B</color>
+
 </resources>
