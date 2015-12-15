@@ -32,7 +32,7 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
         this.storehouses = storehouses;
         mDrawableBuilder = TextDrawable.builder()
                 .beginConfig()
-                    .fontSize(25)
+                    .fontSize(20)
                 .endConfig()
                 .round();
     }
@@ -50,8 +50,10 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
         holder.mStoreDescription.setText(storehouse.getDescription());
         holder.mLastReading.setText(context.getString(R.string.last_reading,
                 storehouse.getLastReading()));
-        int stockValue = (int) storehouse.getPercentageStock() * 100;
-        String stockValueStr = Integer.toString(stockValue) + "%";
+
+        float percentage = storehouse.getPercentageStock() * 100;
+        String stockValueStr = String.format("%.1f", percentage) + "%";
+
         int color;
 
         switch (storehouse.getStockLight()) {
