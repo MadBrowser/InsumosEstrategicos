@@ -27,6 +27,8 @@
     <string name="daily_plan_main_menu">1. Crear Plan Diario</string>
     <string name="stock_register_main_menu">2. Registrar Stock</string>
     <string name="sync_register_main_menu">3. Sincronizar Registros</string>
-    <string name="title_activity_daily_plan">DailyPlanActivity</string>
+
+    <string name="title_activity_daily_plan">1. Crear Plan Diario</string>
+    <string name="loading_message">Cargando datos, por favor espere...</string>
 
 </resources>

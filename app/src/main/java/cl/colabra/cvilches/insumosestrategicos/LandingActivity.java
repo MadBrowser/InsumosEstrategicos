@@ -77,9 +77,8 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void startDailyPlanActivity() {
-        Intent intent = new Intent(this, LandingActivity.class);
+        Intent intent = new Intent(this, DailyPlanActivity.class);
         startActivity(intent);
         finish();
     }
-
 }

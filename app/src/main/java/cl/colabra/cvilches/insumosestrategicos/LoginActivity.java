@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -239,6 +240,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set tag for Login requests
         stringRequest.setTag(TAG);
+        // Set Retry policy
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                Config.getDefaultTimeout(),
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // With the request created, simply add it to our Application's RequestQueue
         InsumosEstrategicos.getInstance().getRequestQueue().add(stringRequest);
 
