@@ -28,16 +28,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity
-            android:name=".DailyPlanActivity"
-            android:label="@string/title_activity_daily_plan"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:name=".LandingActivity"
+            android:label="@string/title_activity_landing"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
         </activity>
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -46,12 +40,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
-
-        <activity
-            android:name=".LandingActivity"
-            android:label="@string/title_activity_landing"
-            android:theme="@style/AppTheme">
-        </activity>
     </application>
 
 </manifest>
