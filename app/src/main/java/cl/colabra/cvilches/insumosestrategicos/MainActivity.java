@@ -40,29 +40,14 @@ import cl.colabra.cvilches.insumosestrategicos.fragments.DailyPlanFragment;
 import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
-public class MainActivity extends AppCompatActivity implements DailyPlanFragment.OnDailyPlanFragmentInteractionListener{
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+public class MainActivity extends AppCompatActivity {
 
     /**
      * The Session Manager class
-     */
+     *//*
     private SessionManager mSessionManager;
 
-    private List<Storehouse> mStorehouseList = new ArrayList<>();
+    // private List<Storehouse> mStorehouseList = new ArrayList<>();
 
     // Application fragments
     private DailyPlanFragment mDailyPlanFragment;
@@ -108,9 +93,9 @@ public class MainActivity extends AppCompatActivity implements DailyPlanFragment
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
+        *//*if (id == R.id.action_settings) {
             return true;
-        } else*/
+        } else*//*
         if (id == R.id.action_logout) {
             mSessionManager.logoutUser();
             startLoginActivity();
@@ -147,23 +132,23 @@ public class MainActivity extends AppCompatActivity implements DailyPlanFragment
 
     }
 
-    /**
+    *//**
      * A placeholder fragment containing a simple view.
-     */
+     *//*
     public static class PlaceholderFragment extends Fragment {
-        /**
+        *//**
          * The fragment argument representing the section number for this
          * fragment.
-         */
+         *//*
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public PlaceholderFragment() {
         }
 
-        /**
+        *//**
          * Returns a new instance of this fragment for the given section
          * number.
-         */
+         *//*
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -182,10 +167,10 @@ public class MainActivity extends AppCompatActivity implements DailyPlanFragment
         }
     }
 
-    /**
+    *//**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
-     */
+     *//*
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         // Page Count
@@ -193,18 +178,18 @@ public class MainActivity extends AppCompatActivity implements DailyPlanFragment
 
         private Context context;
 
-        /**
+        *//**
          * Tab Icons Array
-         */
+         *//*
         private int imageResId[] = new int[] {
                 R.drawable.ic_daily_plan,
                 R.drawable.ic_register,
                 R.drawable.ic_sync
         };
 
-        /**
+        *//**
          * Tab Titles
-         */
+         *//*
         private String tabNames[] = new String[] {
                 "Plan Diario",
                 "Registro de Stock",
@@ -251,5 +236,5 @@ public class MainActivity extends AppCompatActivity implements DailyPlanFragment
             return sb;
         }
 
-    }
+    }*/
 }

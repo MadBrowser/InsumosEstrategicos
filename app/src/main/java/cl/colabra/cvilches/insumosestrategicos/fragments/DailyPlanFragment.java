@@ -1,30 +1,10 @@
 package cl.colabra.cvilches.insumosestrategicos.fragments;
 
-import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.amulyakhare.textdrawable.TextDrawable;
-
-import java.util.List;
-
-import cl.colabra.cvilches.insumosestrategicos.R;
-import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
-import cl.colabra.cvilches.insumosestrategicos.utils.DividerItemDecoration;
 
 public class DailyPlanFragment extends Fragment {
 
-    // Interface listener
+    /*// Interface listener
     private OnDailyPlanFragmentInteractionListener mListener;
 
     // Logic variables
@@ -171,6 +151,6 @@ public class DailyPlanFragment extends Fragment {
 
             }
         }
-    }
+    }*/
 
 }
