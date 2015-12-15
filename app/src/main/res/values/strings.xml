@@ -22,4 +22,5 @@
 
     <string name="storehouse_description">Planta - SAG 1 - Bolas Acero 5.5 fundidas molienda - Elecmetal - Bin 6</string>
     <string name="last_reading">Último Registro: %1$s</string>
+    <string name="title_activity_landing">LandingActivity</string>
 </resources>
