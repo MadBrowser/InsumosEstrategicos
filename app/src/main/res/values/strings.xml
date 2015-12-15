@@ -22,5 +22,10 @@
 
     <string name="storehouse_description">Planta - SAG 1 - Bolas Acero 5.5 fundidas molienda - Elecmetal - Bin 6</string>
     <string name="last_reading">Último Registro: %1$s</string>
-    <string name="title_activity_landing">LandingActivity</string>
+    <string name="title_activity_landing">Menú Principal</string>
+
+    <string name="daily_plan_main_menu">1. Crear Plan Diario</string>
+    <string name="stock_register_main_menu">2. Registrar Stock</string>
+    <string name="sync_register_main_menu">3. Sincronizar Registros</string>
+
 </resources>
