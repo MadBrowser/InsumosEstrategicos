@@ -32,6 +32,8 @@ import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapte
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.queriable.ModelQueriable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cl.colabra.cvilches.insumosestrategicos.fragments.DailyPlanFragment;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements DailyPlanFragment
      */
     private SessionManager mSessionManager;
 
-    private List<Storehouse> mStorehouseList;
+    private List<Storehouse> mStorehouseList = new ArrayList<>();
 
     // Application fragments
     private DailyPlanFragment mDailyPlanFragment;
@@ -136,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements DailyPlanFragment
             @Override
             public void onResultReceived(List<Storehouse> storehouses) {
                 mStorehouseList = storehouses;
-                Log.d(TAG, "Listado obtenido desde la DB");
             }
         };
     }
