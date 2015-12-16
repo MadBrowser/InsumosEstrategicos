@@ -59,7 +59,11 @@ public class DailyPlanActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         if (sessionManager.isLoggedIn()) {
-            getStoreListFromDB();
+            if (mStorehouseList.size() == 0) {
+                getStoreListFromDB();
+            } else {
+                setUpRecyclerView();
+            }
         } else {
             sessionManager.logoutUser();
         }
