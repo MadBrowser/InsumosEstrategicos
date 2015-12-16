@@ -3,6 +3,7 @@ package cl.colabra.cvilches.insumosestrategicos.adapters;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,10 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
     private List<Storehouse> storehouses;
     private TextDrawable.IBuilder mDrawableBuilder;
 
+    // Selection attributes
+    private SparseBooleanArray selectedItems;
+    private boolean selectionModeEnabled;
+
     public DailyPlanAdapter(Context context, List<Storehouse> storehouses) {
         this.context = context;
         this.storehouses = storehouses;
@@ -35,6 +40,8 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
                     .fontSize(20)
                 .endConfig()
                 .round();
+        this.selectedItems = new SparseBooleanArray();
+        this.selectionModeEnabled = true;
     }
 
     @Override
@@ -51,50 +58,94 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
         holder.mLastReading.setText(context.getString(R.string.last_reading,
                 storehouse.getLastReading()));
 
-        float percentage = storehouse.getPercentageStock() * 100;
-        String stockValueStr = String.format("%.1f", percentage) + "%";
-
-        int color;
-
-        switch (storehouse.getStockLight()) {
-            case Storehouse.RED_LIGHTS:
-                color = ContextCompat.getColor(context, R.color.stockLightRed);
-                break;
-            case Storehouse.YELLOW_LIGHTS:
-                color = ContextCompat.getColor(context, R.color.stockLightYellow);
-                break;
-            case Storehouse.GREEN_LIGHTS:
-                color = ContextCompat.getColor(context, R.color.stockLightGreen);
-                break;
-            default:
-                color = ContextCompat.getColor(context, R.color.stockLightGreen);
-                break;
+        if (selectionModeEnabled && selectedItems.get(position, false)) {
+            updateCheckState(holder, storehouse, true);
+        } else {
+            updateCheckState(holder, storehouse, false);
         }
-        holder.mStockLights.setImageDrawable(mDrawableBuilder.build(stockValueStr, color));
     }
 
     public int getItemCount() {
         return storehouses.size();
     }
 
+    private void toggleSelection(DailyPlanViewHolder viewHolder, int position) {
+        Storehouse selectedStorehouse = this.storehouses.get(position);
+        if (selectedItems.get(position, false)) { // Item was selected
+            // Remove it from selected items list
+            selectedItems.delete(position);
+            // Update view holder's state
+            updateCheckState(viewHolder, selectedStorehouse, false);
+            // Tell the Activity that we have deselected an item
+        } else { // Item wasn't selected
+            // Add item to the selected items list
+            selectedItems.put(position, true);
+            // Update view holder's state
+            updateCheckState(viewHolder, selectedStorehouse, true);
+            // Tell the Activity that we have selected an item
+        }
+    }
+
+    private void updateCheckState(DailyPlanViewHolder viewHolder, Storehouse storehouse,
+                                  Boolean checked) {
+        if (checked) {
+            viewHolder.mStockLights.setImageDrawable(
+                    mDrawableBuilder.build(
+                            " ", ContextCompat.getColor(
+                                    context, R.color.selectedIconBackgroundColor)));
+            viewHolder.mView.setBackgroundColor(
+                    ContextCompat.getColor(context, R.color.selectedItemBackgroundColor));
+            viewHolder.mCheckIcon.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.mStockLights.setImageDrawable(mDrawableBuilder
+                    .build(getStockString(storehouse), getStockLight(storehouse)));
+            viewHolder.mView.setBackgroundColor(
+                    ContextCompat.getColor(context, R.color.backgroundColor));
+            viewHolder.mCheckIcon.setVisibility(View.GONE);
+        }
+    }
+
+    private String getStockString(Storehouse storehouse) {
+        return String.format("%.1f", storehouse.getPercentageStock() * 100) + "%";
+    }
+
+    private int getStockLight(Storehouse storehouse) {
+        switch (storehouse.getStockLight()) {
+            case Storehouse.RED_LIGHTS:
+                return ContextCompat.getColor(context, R.color.stockLightRed);
+            case Storehouse.YELLOW_LIGHTS:
+                return ContextCompat.getColor(context, R.color.stockLightYellow);
+            case Storehouse.GREEN_LIGHTS:
+                return ContextCompat.getColor(context, R.color.stockLightGreen);
+            default:
+                return ContextCompat.getColor(context, R.color.stockLightGreen);
+        }
+    }
+
     public class DailyPlanViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener {
 
+        private View mView;
         private TextView mStoreDescription;
         private TextView mLastReading;
         private ImageView mStockLights;
+        private ImageView mCheckIcon;
 
         public DailyPlanViewHolder(View v) {
             super(v);
+            this.mView = v;
             this.mStoreDescription = (TextView) v.findViewById(R.id.storehouse_description);
             this.mLastReading = (TextView) v.findViewById(R.id.last_reading);
             this.mStockLights = (ImageView) v.findViewById(R.id.stock_light);
+            this.mCheckIcon = (ImageView) v.findViewById(R.id.check_icon);
             mStockLights.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            if (selectionModeEnabled) {
+                toggleSelection(this, getAdapterPosition());
+            }
         }
     }
 }

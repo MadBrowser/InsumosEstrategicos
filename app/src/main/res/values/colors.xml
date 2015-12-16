@@ -11,11 +11,15 @@
     <color name="titleText">#FFFFFF</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
-    <color name="backgroundColor">#FFFFFF</color>
 
     <!-- Stock Lights Colors-->
     <color name="stockLightRed">#D32F2F</color>
     <color name="stockLightYellow">#FFA000</color>
     <color name="stockLightGreen">#00796B</color>
+
+    <!-- BackGround Colors -->
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="selectedIconBackgroundColor">#727272</color>
+    <color name="selectedItemBackgroundColor">#B3E5FC</color>
 
 </resources>

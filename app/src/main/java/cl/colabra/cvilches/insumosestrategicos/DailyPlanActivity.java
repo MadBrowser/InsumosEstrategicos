@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +32,8 @@ import cl.colabra.cvilches.insumosestrategicos.utils.DividerItemDecoration;
 import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
 public class DailyPlanActivity extends AppCompatActivity {
+
+    private static final String TAG = "SGIE_DailyPlan";
 
     private List<Storehouse> mStorehouseList = new ArrayList<>();
     private RelativeLayout vLoadingLayout;
@@ -171,4 +172,5 @@ public class DailyPlanActivity extends AppCompatActivity {
             fab.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
+
 }
