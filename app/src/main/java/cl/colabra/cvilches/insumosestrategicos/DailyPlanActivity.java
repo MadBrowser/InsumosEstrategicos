@@ -11,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -31,16 +33,24 @@ import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.utils.DividerItemDecoration;
 import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
-public class DailyPlanActivity extends AppCompatActivity {
+public class DailyPlanActivity extends AppCompatActivity implements
+        View.OnClickListener,
+        DailyPlanAdapter.OnStoreHouseSelected,
+        ActionMode.Callback {
 
     private static final String TAG = "SGIE_DailyPlan";
 
     private List<Storehouse> mStorehouseList = new ArrayList<>();
+
     private RelativeLayout vLoadingLayout;
-    private RecyclerView vStorehousesList;
     private FloatingActionButton fab;
 
+    private RecyclerView vStorehousesList;
+    private DailyPlanAdapter mAdapter;
+
     private SessionManager sessionManager;
+
+    private ActionMode mActionMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,7 @@ public class DailyPlanActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(this);
 
         vLoadingLayout = (RelativeLayout) findViewById(R.id.loading_layout);
         vStorehousesList = (RecyclerView) findViewById(R.id.storehouses_list);
@@ -122,8 +133,8 @@ public class DailyPlanActivity extends AppCompatActivity {
         // Fixed Size
         vStorehousesList.setHasFixedSize(true);
         // Adapter
-        DailyPlanAdapter adapter = new DailyPlanAdapter(this, mStorehouseList);
-        vStorehousesList.setAdapter(adapter);
+        mAdapter = new DailyPlanAdapter(this, mStorehouseList, this);
+        vStorehousesList.setAdapter(mAdapter);
         showProgress(false);
     }
 
@@ -173,4 +184,49 @@ public class DailyPlanActivity extends AppCompatActivity {
         }
     }
 
+    private void setActionModeTitle(String title) {
+        this.mActionMode.setTitle(title);
+    }
+
+    @Override
+    public void onClick(View v) {
+        mAdapter.setSelectionMode(true);
+        this.mActionMode = startActionMode(this);
+        setActionModeTitle(getString(R.string.message_select_storehouses));
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(R.menu.menu_daily_plan_cab, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mode.finish();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        mAdapter.setSelectionMode(false);
+        mAdapter.clearSelection();
+        mActionMode = null;
+    }
+
+    @Override
+    public void selectionChanged(int selectedNumber) {
+        setActionModeTitle(getString(R.string.message_selected_count, selectedNumber));
+    }
 }

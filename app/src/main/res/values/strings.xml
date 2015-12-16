@@ -29,6 +29,9 @@
     <string name="sync_register_main_menu">3. Sincronizar Registros</string>
 
     <string name="title_activity_daily_plan">1. Crear Plan Diario</string>
-    <string name="loading_message">Cargando datos, por favor espere...</string>
+    <string name="loading_message">Cargando datos, por favor espere…</string>
+
+    <string name="message_select_storehouses">Seleccione almacenes a registrar</string>
+    <string name="message_selected_count">%1$s almacenes seleccionado(s)</string>
 
 </resources>

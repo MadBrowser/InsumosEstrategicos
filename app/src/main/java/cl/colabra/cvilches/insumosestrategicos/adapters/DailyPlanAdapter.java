@@ -31,8 +31,10 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
     // Selection attributes
     private SparseBooleanArray selectedItems;
     private boolean selectionModeEnabled;
+    private OnStoreHouseSelected mListener;
 
-    public DailyPlanAdapter(Context context, List<Storehouse> storehouses) {
+    public DailyPlanAdapter(Context context, List<Storehouse> storehouses, OnStoreHouseSelected
+            listener) {
         this.context = context;
         this.storehouses = storehouses;
         mDrawableBuilder = TextDrawable.builder()
@@ -41,7 +43,8 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
                 .endConfig()
                 .round();
         this.selectedItems = new SparseBooleanArray();
-        this.selectionModeEnabled = true;
+        this.selectionModeEnabled = false;
+        this.mListener = listener;
     }
 
     @Override
@@ -76,14 +79,14 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
             selectedItems.delete(position);
             // Update view holder's state
             updateCheckState(viewHolder, selectedStorehouse, false);
-            // Tell the Activity that we have deselected an item
         } else { // Item wasn't selected
             // Add item to the selected items list
             selectedItems.put(position, true);
             // Update view holder's state
             updateCheckState(viewHolder, selectedStorehouse, true);
-            // Tell the Activity that we have selected an item
         }
+        // Tell the activity that the selection has changed
+        mListener.selectionChanged(this.selectedItems.size());
     }
 
     private void updateCheckState(DailyPlanViewHolder viewHolder, Storehouse storehouse,
@@ -120,6 +123,21 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
             default:
                 return ContextCompat.getColor(context, R.color.stockLightGreen);
         }
+    }
+
+    public void setSelectionMode(Boolean value) {
+        this.selectionModeEnabled = value;
+    }
+
+    public void clearSelection() {
+        for (int i = 0; i < selectedItems.size(); i++) {
+            notifyItemChanged(i);
+        }
+        this.selectedItems.clear();
+    }
+
+    public interface OnStoreHouseSelected {
+        void selectionChanged(int selectedNumber);
     }
 
     public class DailyPlanViewHolder extends RecyclerView.ViewHolder implements
