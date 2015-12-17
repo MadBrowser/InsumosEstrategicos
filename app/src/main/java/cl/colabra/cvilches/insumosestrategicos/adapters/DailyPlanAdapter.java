@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cl.colabra.cvilches.insumosestrategicos.R;
@@ -132,6 +133,14 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
     public void clearSelection() {
         this.selectedItems.clear();
         notifyDataSetChanged();
+    }
+
+    public List<Storehouse> getSelectedStorehouses() {
+        List<Storehouse> selectedStorehouses = new ArrayList<>();
+        for (int i = 0; i < selectedItems.size(); i++) {
+            selectedStorehouses.add(storehouses.get(selectedItems.keyAt(i)));
+        }
+        return selectedStorehouses;
     }
 
     public interface OnStoreHouseSelected {

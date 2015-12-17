@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
@@ -190,9 +193,38 @@ public class DailyPlanActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        mAdapter.setSelectionMode(true);
-        this.mActionMode = startActionMode(this);
-        setActionModeTitle(getString(R.string.message_select_storehouses));
+        if (mActionMode == null) {
+            mAdapter.setSelectionMode(true);
+            this.mActionMode = startActionMode(this);
+            setActionModeTitle(getString(R.string.message_select_storehouses));
+        } else {
+            createDailyPlan();
+            mActionMode.finish();
+        }
+        updateFabState();
+    }
+
+    private void updateFabState() {
+        if (mActionMode != null) {
+            fab.setBackgroundTintList(ColorStateList.valueOf(
+                    ContextCompat.getColor(this, R.color.colorPrimary)));
+            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_check));
+        } else {
+            fab.setBackgroundTintList(ColorStateList.valueOf(
+                    ContextCompat.getColor(this, R.color.colorAccent)));
+            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_daily_plan));
+        }
+    }
+
+    private void createDailyPlan() {
+        List<Storehouse> storehouses = mAdapter.getSelectedStorehouses();
+        if (storehouses.size() == 0) { // If there aren't selected storehouses, show alert
+            Toast.makeText(DailyPlanActivity.this,
+                    R.string.message_select_at_least_one_storehouse,
+                    Toast.LENGTH_LONG).show();
+        } else {
+
+        }
     }
 
     @Override
@@ -223,6 +255,7 @@ public class DailyPlanActivity extends AppCompatActivity implements
         mAdapter.setSelectionMode(false);
         mAdapter.clearSelection();
         mActionMode = null;
+        updateFabState();
     }
 
     @Override

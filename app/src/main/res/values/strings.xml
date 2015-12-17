@@ -33,5 +33,6 @@
 
     <string name="message_select_storehouses">Seleccione almacenes a registrar</string>
     <string name="message_selected_count">%1$s almacenes seleccionado(s)</string>
+    <string name="message_select_at_least_one_storehouse">Debes seleccionar almenos un almacén</string>
 
 </resources>
