@@ -130,10 +130,8 @@ public class DailyPlanAdapter extends RecyclerView.Adapter<DailyPlanAdapter.Dail
     }
 
     public void clearSelection() {
-        for (int i = 0; i < selectedItems.size(); i++) {
-            notifyItemChanged(i);
-        }
         this.selectedItems.clear();
+        notifyDataSetChanged();
     }
 
     public interface OnStoreHouseSelected {
