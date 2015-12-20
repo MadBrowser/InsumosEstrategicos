@@ -8,6 +8,9 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import cl.colabra.cvilches.insumosestrategicos.utils.SGIEDataBase;
 
 /**
@@ -22,40 +25,29 @@ public class Register extends BaseModel {
     public static final String REGISTERED = "cl.colabra.registered";
     public static final String SYNCED = "cl.colabra.synced";
     public static final String EXPIRED = "cl.colabra.expired";
-
-    @Column
-    @PrimaryKey(autoincrement = true)
-    private long id;
-
-    @Column
-    private String status;
-
-    private String comment;
-
-    // Empty constructor required for DB Flow
-    public Register() {
-    }
-
-    public Register(ForeignKeyContainer<DailyPlan> dailyPlanFKContainer,
-                    ForeignKeyContainer<Storehouse> storehouseFKContainer) {
-        this.dailyPlanFKContainer = dailyPlanFKContainer;
-        this.storehouseFKContainer = storehouseFKContainer;
-        this.status = PENDING;
-    }
-
     @Column
     @ForeignKey(references = {
             @ForeignKeyReference(columnName = "daily_plan_id", columnType = Long.class,
                     foreignColumnName = "id")},
             saveForeignKeyModel = false)
     public ForeignKeyContainer<DailyPlan> dailyPlanFKContainer;
-
     @Column
     @ForeignKey(references = {
             @ForeignKeyReference(columnName = "storehouse_id", columnType = Long.class,
                     foreignColumnName = "id")},
             saveForeignKeyModel = false)
     public ForeignKeyContainer<Storehouse> storehouseFKContainer;
+    @Column
+    @PrimaryKey(autoincrement = true)
+    private long id;
+    @Column
+    private String status;
+    private String comment;
+
+    // Empty constructor required for DB Flow
+    public Register() {
+        this.status = PENDING;
+    }
 
     public long getId() {
         return id;
@@ -79,5 +71,19 @@ public class Register extends BaseModel {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public void associateDailyPlan(DailyPlan dailyPlan) {
+        this.dailyPlanFKContainer = new ForeignKeyContainer<>(DailyPlan.class);
+        Map<String, Object> keys = new LinkedHashMap<>();
+        keys.put("id", dailyPlan.getId());
+        this.dailyPlanFKContainer.setData(keys);
+    }
+
+    public void associateStorehouse(Storehouse storehouse) {
+        this.storehouseFKContainer = new ForeignKeyContainer<>(Storehouse.class);
+        Map<String, Object> keys = new LinkedHashMap<>();
+        keys.put("id", storehouse.getId());
+        this.storehouseFKContainer.setData(keys);
     }
 }

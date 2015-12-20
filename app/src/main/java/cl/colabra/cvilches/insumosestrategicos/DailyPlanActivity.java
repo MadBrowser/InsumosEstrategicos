@@ -27,11 +27,14 @@ import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.queriable.ModelQueriable;
+import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cl.colabra.cvilches.insumosestrategicos.adapters.DailyPlanAdapter;
+import cl.colabra.cvilches.insumosestrategicos.model.DailyPlan;
+import cl.colabra.cvilches.insumosestrategicos.model.Register;
 import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.utils.DividerItemDecoration;
 import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
@@ -221,9 +224,27 @@ public class DailyPlanActivity extends AppCompatActivity implements
                     R.string.message_select_at_least_one_storehouse,
                     Toast.LENGTH_LONG).show();
         } else {
+            DailyPlan dailyPlan = new DailyPlan();
+            dailyPlan.save();
+            List<Register> registers = new ArrayList<>();
             for (Storehouse storehouse : storehouses) {
-
+                // Create the register
+                Register register = new Register();
+                register.save();
+                register.associateDailyPlan(dailyPlan);
+                register.associateStorehouse(storehouse);
+                register.save();
+                registers.add(register);
+                // Associate the register with the corresponding storehouse
+                storehouse.registerList.add(register);
+                storehouse.save();
             }
+            dailyPlan.registerList = registers;
+            dailyPlan.save();
+            Toast.makeText(DailyPlanActivity.this,
+                    R.string.message_daily_plan_created,
+                    Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 

@@ -9,6 +9,7 @@ import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cl.colabra.cvilches.insumosestrategicos.utils.SGIEDataBase;
@@ -70,6 +71,7 @@ public class Storehouse extends BaseModel {
         this.hardCap = hardCap;
         this.hardCapCapacity = hardCapCapacity;
         this.stock = stock;
+        this.registerList = new ArrayList<>();
     }
 
     public long getId() {

@@ -9,6 +9,7 @@ import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class DailyPlan extends BaseModel {
     public static final String ON_EXECUTION = "cl.colabra.on_execution";
     public static final String DONE = "cl.colabra.done";
     public static final String EXPIRED = "cl.colabra.expired";
+    public List<Register> registerList;
 
     @Column
     @PrimaryKey(autoincrement = true)
@@ -37,16 +39,11 @@ public class DailyPlan extends BaseModel {
     @Column
     private String status;
 
-    List<Register> registerList;
-
     // Empty constructor required for DB Flow
     public DailyPlan() {
-    }
-
-    public DailyPlan(List<Register> registerList) {
         this.createdAt = new Date();
         this.status = ON_EXECUTION;
-        this.registerList = registerList;
+        this.registerList = new ArrayList<>();
     }
 
     public long getId() {
