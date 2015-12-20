@@ -27,7 +27,6 @@ import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.queriable.ModelQueriable;
-import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
 import java.util.ArrayList;
 import java.util.List;
