@@ -41,8 +41,6 @@ public class DailyPlanActivity extends AppCompatActivity implements
         DailyPlanAdapter.OnStoreHouseSelected,
         ActionMode.Callback {
 
-    private static final String TAG = "SGIE_DailyPlan";
-
     private List<Storehouse> mStorehouseList = new ArrayList<>();
 
     private RelativeLayout vLoadingLayout;
@@ -223,7 +221,9 @@ public class DailyPlanActivity extends AppCompatActivity implements
                     R.string.message_select_at_least_one_storehouse,
                     Toast.LENGTH_LONG).show();
         } else {
+            for (Storehouse storehouse : storehouses) {
 
+            }
         }
     }
 

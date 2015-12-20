@@ -1,9 +1,15 @@
 package cl.colabra.cvilches.insumosestrategicos.model;
 
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ModelContainer;
+import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.builder.Condition;
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import java.util.List;
 
 import cl.colabra.cvilches.insumosestrategicos.utils.SGIEDataBase;
 
@@ -12,50 +18,41 @@ import cl.colabra.cvilches.insumosestrategicos.utils.SGIEDataBase;
  * Created by Carlos Vilches on 12/14/15. By appointment
  * of Colabra for client 'Minera Collahuasi'
  */
+@ModelContainer
 @Table(databaseName = SGIEDataBase.NAME)
 public class Storehouse extends BaseModel {
 
-    // Constants
     public static final String GREEN_LIGHTS = "Verde";
     public static final String YELLOW_LIGHTS = "Amarillo";
     public static final String RED_LIGHTS = "Rojo";
+    public List<Register> registerList;
 
     @Column
     @PrimaryKey
     private long id;
-
     @Column
     private String description;
-
     @Column
     private float percentageStock;
-
     @Column
     private String stockLight;
-
     @Column
     private String lastReading;
-
     @Column
     private float capacity;
-
     @Column
     private float softCap;
-
     @Column
     private float softCapCapacity;
-
     @Column
     private float hardCap;
-
     @Column
     private float hardCapCapacity;
-
     @Column
     private float stock;
 
     // Empty constructor required for DB Flow
-    public Storehouse () {
+    public Storehouse() {
 
     }
 
@@ -115,4 +112,63 @@ public class Storehouse extends BaseModel {
         this.lastReading = lastReading;
     }
 
+    public float getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(float capacity) {
+        this.capacity = capacity;
+    }
+
+    public float getSoftCap() {
+        return softCap;
+    }
+
+    public void setSoftCap(float softCap) {
+        this.softCap = softCap;
+    }
+
+    public float getSoftCapCapacity() {
+        return softCapCapacity;
+    }
+
+    public void setSoftCapCapacity(float softCapCapacity) {
+        this.softCapCapacity = softCapCapacity;
+    }
+
+    public float getHardCap() {
+        return hardCap;
+    }
+
+    public void setHardCap(float hardCap) {
+        this.hardCap = hardCap;
+    }
+
+    public float getHardCapCapacity() {
+        return hardCapCapacity;
+    }
+
+    public void setHardCapCapacity(float hardCapCapacity) {
+        this.hardCapCapacity = hardCapCapacity;
+    }
+
+    public float getStock() {
+        return stock;
+    }
+
+    public void setStock(float stock) {
+        this.stock = stock;
+    }
+
+    @OneToMany(methods = {OneToMany.Method.SAVE, OneToMany.Method.DELETE}, variableName = "registerList")
+    public List<Register> getMyRegisters() {
+        if (registerList == null || registerList.isEmpty()) {
+            registerList = new Select()
+                    .from(Register.class)
+                    .where(Condition.column(Register$Table.STOREHOUSEFKCONTAINER_STOREHOUSE_ID)
+                            .is(id))
+                    .queryList();
+        }
+        return registerList;
+    }
 }
