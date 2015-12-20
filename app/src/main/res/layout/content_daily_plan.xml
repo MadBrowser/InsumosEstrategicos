@@ -13,39 +13,7 @@
     tools:context="cl.colabra.cvilches.insumosestrategicos.DailyPlanActivity"
     tools:showIn="@layout/activity_daily_plan">
 
-    <RelativeLayout
-        android:id="@+id/loading_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/loading_message"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="8dp"
-            android:src="@drawable/collahuasi_logo"/>
-
-        <TextView
-            android:id="@+id/loading_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/loading_progress"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="8dp"
-            android:text="@string/loading_message"
-            android:textSize="@dimen/default_text_size"/>
-
-        <ProgressBar
-            android:id="@+id/loading_progress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:layout_margin="8dp"/>
-
-    </RelativeLayout>
-
+    <include layout="@layout/loading_data"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/storehouses_list"
