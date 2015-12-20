@@ -50,24 +50,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cl.colabra.cvilches.insumosestrategicos.LandingActivity"/>
         </activity>
-        <activity
-            android:name=".RecordListActivity"
-            android:label="@string/title_record_list"
-            android:parentActivityName=".LandingActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cl.colabra.cvilches.insumosestrategicos.LandingActivity"/>
-        </activity>
-        <activity
-            android:name=".RecordDetailActivity"
-            android:label="@string/title_record_detail"
-            android:parentActivityName=".RecordListActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cl.colabra.cvilches.insumosestrategicos.RecordListActivity"/>
-        </activity>
     </application>
 
 </manifest>
