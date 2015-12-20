@@ -37,7 +37,7 @@ public class LandingActivity extends AppCompatActivity {
         vStockRegisterLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startDailyPlanActivity();
+                startRegisterListActivity();
             }
         });
 
@@ -78,6 +78,11 @@ public class LandingActivity extends AppCompatActivity {
 
     private void startDailyPlanActivity() {
         Intent intent = new Intent(this, DailyPlanActivity.class);
+        startActivity(intent);
+    }
+
+    private void startRegisterListActivity() {
+        Intent intent = new Intent(this, RecordListActivity.class);
         startActivity(intent);
     }
 }
