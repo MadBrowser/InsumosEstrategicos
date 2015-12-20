@@ -36,17 +36,43 @@ public class Storehouse extends BaseModel {
     @Column
     private String lastReading;
 
+    @Column
+    private float capacity;
+
+    @Column
+    private float softCap;
+
+    @Column
+    private float softCapCapacity;
+
+    @Column
+    private float hardCap;
+
+    @Column
+    private float hardCapCapacity;
+
+    @Column
+    private float stock;
+
     // Empty constructor required for DB Flow
     public Storehouse () {
 
     }
 
-    public Storehouse(long id, String description, float percentageStock, String stockLight, String lastReading) {
+    public Storehouse(long id, String description, float percentageStock, String stockLight,
+                      String lastReading, float capacity, float softCap, float softCapCapacity,
+                      float hardCap, float hardCapCapacity, float stock) {
         this.id = id;
         this.description = description;
         this.percentageStock = percentageStock;
         this.stockLight = stockLight;
         this.lastReading = lastReading;
+        this.capacity = capacity;
+        this.softCap = softCap;
+        this.softCapCapacity = softCapCapacity;
+        this.hardCap = hardCap;
+        this.hardCapCapacity = hardCapCapacity;
+        this.stock = stock;
     }
 
     public long getId() {

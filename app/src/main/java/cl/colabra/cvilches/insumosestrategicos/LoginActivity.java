@@ -263,7 +263,13 @@ public class LoginActivity extends AppCompatActivity {
                                 jsonObject.getString("Desc_Almacen"),
                                 Float.parseFloat(jsonObject.getString("Porcentaje_Stock")),
                                 jsonObject.getString("Semaforo_Stock"),
-                                jsonObject.optString("Ultima_Lectura", "")
+                                jsonObject.optString("Ultima_Lectura", ""),
+                                Float.parseFloat(jsonObject.getString("Capacidad_Real")),
+                                Float.parseFloat(jsonObject.getString("Factor_Lim_Amarillo")),
+                                Float.parseFloat(jsonObject.getString("Lim_Amarillo")),
+                                Float.parseFloat(jsonObject.getString("Factor_Lim_Rojo")),
+                                Float.parseFloat(jsonObject.getString("Lim_Rojo")),
+                                Float.parseFloat(jsonObject.getString("Stock"))
                         );
                         TransactionManager.getInstance().saveOnSaveQueue(storehouse);
                     }
