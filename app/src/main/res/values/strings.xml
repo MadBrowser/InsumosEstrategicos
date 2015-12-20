@@ -35,5 +35,7 @@
     <string name="message_selected_count">%1$s almacenes seleccionado(s)</string>
     <string name="message_select_at_least_one_storehouse">Debes seleccionar almenos un almacén</string>
     <string name="message_daily_plan_created">¡Plan creado exitosamente!</string>
+    <string name="title_record_list">Records</string>
+    <string name="title_record_detail">Record Detail</string>
 
 </resources>
