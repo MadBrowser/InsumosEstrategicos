@@ -3,6 +3,7 @@ package cl.colabra.cvilches.insumosestrategicos;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -43,10 +45,6 @@ import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,6 +77,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Sets up Session Manager
+        sessionManager = new SessionManager(this);
+
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.username);
 
@@ -105,8 +107,10 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        // Sets up Session Manager
-        sessionManager = new SessionManager(this);
+        if (sessionManager.isLoggedIn()) {
+            showProgress(true);
+            getStorehousesList();
+        }
     }
 
     /**
@@ -236,6 +240,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set tag for Login requests
         stringRequest.setTag(TAG);
+        // Set Retry policy
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                Config.getDefaultTimeout(),
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // With the request created, simply add it to our Application's RequestQueue
         InsumosEstrategicos.getInstance().getRequestQueue().add(stringRequest);
 
@@ -254,11 +263,17 @@ public class LoginActivity extends AppCompatActivity {
                                 jsonObject.getString("Desc_Almacen"),
                                 Float.parseFloat(jsonObject.getString("Porcentaje_Stock")),
                                 jsonObject.getString("Semaforo_Stock"),
-                                jsonObject.optString("Ultima_Lectura", "")
+                                jsonObject.optString("Ultima_Lectura", ""),
+                                Float.parseFloat(jsonObject.getString("Capacidad_Real")),
+                                Float.parseFloat(jsonObject.getString("Factor_Lim_Amarillo")),
+                                Float.parseFloat(jsonObject.getString("Lim_Amarillo")),
+                                Float.parseFloat(jsonObject.getString("Factor_Lim_Rojo")),
+                                Float.parseFloat(jsonObject.getString("Lim_Rojo")),
+                                Float.parseFloat(jsonObject.getString("Stock"))
                         );
                         TransactionManager.getInstance().saveOnSaveQueue(storehouse);
                     }
-
+                    startMainActivity();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -274,10 +289,17 @@ public class LoginActivity extends AppCompatActivity {
                 // TODO: Error parsing
                 Log.d(TAG, error.toString());
                 showProgress(false);
-                Toast.makeText(getApplicationContext(), R.string.get_storehouse_list_error, Toast.LENGTH_SHORT)
+                Toast.makeText(getApplicationContext(),
+                        R.string.get_storehouse_list_error, Toast.LENGTH_LONG)
                         .show();
             }
         };
+    }
+
+    private void startMainActivity() {
+        Intent intent = new Intent(this, LandingActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
