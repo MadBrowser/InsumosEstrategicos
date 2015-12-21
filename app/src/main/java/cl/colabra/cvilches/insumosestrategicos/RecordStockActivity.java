@@ -2,53 +2,61 @@ package cl.colabra.cvilches.insumosestrategicos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.RelativeLayout;
 
+import java.util.List;
+
+import cl.colabra.cvilches.insumosestrategicos.model.Register;
+import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
-public class LandingActivity extends AppCompatActivity {
+public class RecordStockActivity extends AppCompatActivity {
 
     private SessionManager sessionManager;
+
+    private List<Register> registerList;
+    private List<Storehouse> storehouseList;
+
+    private RelativeLayout vLoadingLayout;
+    private RelativeLayout vNoDataLayout;
+    private RecyclerView vRegistersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
+        setContentView(R.layout.activity_record_stock);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        RelativeLayout vDailyPlanLayout = (RelativeLayout) findViewById(R.id.daily_plan);
-        RelativeLayout vStockRegisterLayout = (RelativeLayout) findViewById(R.id.stock_register);
-        RelativeLayout vSyncLayout = (RelativeLayout) findViewById(R.id.sync);
+        // Set the loading data layout
+        vLoadingLayout = (RelativeLayout) findViewById(R.id.loading_layout);
+        vNoDataLayout = (RelativeLayout) findViewById(R.id.no_data_layout);
+        vRegistersList = (RecyclerView) findViewById(R.id.registers_list);
 
-        vDailyPlanLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startDailyPlanActivity();
-            }
-        });
-
-        vStockRegisterLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRegisterListActivity();
-            }
-        });
-
-        vSyncLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startDailyPlanActivity();
-            }
-        });
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         sessionManager = new SessionManager(this);
+
+        if (sessionManager.isLoggedIn()) {
+            if (registerList.size() == 0 || storehouseList.size() == 0) {
+
+            } else {
+
+            }
+        } else {
+            sessionManager.logoutUser();
+        }
+
     }
 
     @Override
@@ -76,13 +84,5 @@ public class LandingActivity extends AppCompatActivity {
         finish();
     }
 
-    private void startDailyPlanActivity() {
-        Intent intent = new Intent(this, DailyPlanActivity.class);
-        startActivity(intent);
-    }
 
-    private void startRegisterListActivity() {
-        Intent intent = new Intent(this, RecordStockActivity.class);
-        startActivity(intent);
-    }
 }
