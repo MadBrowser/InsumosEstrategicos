@@ -39,5 +39,5 @@
     <string name="title_record_detail">Record Detail</string>
     <string name="title_activity_record_stock">Registrar Stock</string>
     <string name="no_records_data_message">No hay registros pendientes, para registrar stock debes crear un plan diario</string>
-
+    
 </resources>
