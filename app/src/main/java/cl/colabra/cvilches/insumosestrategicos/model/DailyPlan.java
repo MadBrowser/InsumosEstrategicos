@@ -6,6 +6,7 @@ import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
+import com.raizlabs.android.dbflow.sql.builder.ConditionQueryBuilder;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
@@ -76,9 +77,17 @@ public class DailyPlan extends BaseModel {
             registerList = new Select()
                     .from(Register.class)
                     .where(Condition.column(Register$Table.DAILYPLANFKCONTAINER_DAILY_PLAN_ID)
-                            .is(id))
+                        .is(id))
                     .queryList();
         }
         return registerList;
+    }
+
+    public List<Register> getMyPendingRegisters() {
+        return new Select()
+                .from(Register.class)
+                .where(Condition.column(Register$Table.DAILYPLANFKCONTAINER_DAILY_PLAN_ID).is(id))
+                .and(Condition.column("status").is(Register.PENDING))
+                .queryList();
     }
 }
