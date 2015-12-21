@@ -39,10 +39,13 @@ public class Register extends BaseModel {
     public ForeignKeyContainer<Storehouse> storehouseFKContainer;
     @Column
     @PrimaryKey(autoincrement = true)
-    private long id;
+    public long id;
     @Column
-    private String status;
-    private String comment;
+    public String status;
+    @Column
+    public String comment;
+    @Column
+    public float stock;
 
     // Empty constructor required for DB Flow
     public Register() {
@@ -71,6 +74,14 @@ public class Register extends BaseModel {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public float getStock() {
+        return stock;
+    }
+
+    public void setStock(float stock) {
+        this.stock = stock;
     }
 
     public void associateDailyPlan(DailyPlan dailyPlan) {

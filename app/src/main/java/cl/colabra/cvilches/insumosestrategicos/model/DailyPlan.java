@@ -31,13 +31,13 @@ public class DailyPlan extends BaseModel {
 
     @Column
     @PrimaryKey(autoincrement = true)
-    private long id;
+    public long id;
 
     @Column
-    private Date createdAt;
+    public Date createdAt;
 
     @Column
-    private String status;
+    public String status;
 
     // Empty constructor required for DB Flow
     public DailyPlan() {

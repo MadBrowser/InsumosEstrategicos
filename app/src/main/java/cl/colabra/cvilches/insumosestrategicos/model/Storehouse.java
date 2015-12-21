@@ -30,27 +30,27 @@ public class Storehouse extends BaseModel {
 
     @Column
     @PrimaryKey
-    private long id;
+    public long id;
     @Column
-    private String description;
+    public String description;
     @Column
-    private float percentageStock;
+    public float percentageStock;
     @Column
-    private String stockLight;
+    public String stockLight;
     @Column
-    private String lastReading;
+    public String lastReading;
     @Column
-    private float capacity;
+    public float capacity;
     @Column
-    private float softCap;
+    public float softCap;
     @Column
-    private float softCapCapacity;
+    public float softCapCapacity;
     @Column
-    private float hardCap;
+    public float hardCap;
     @Column
-    private float hardCapCapacity;
+    public float hardCapCapacity;
     @Column
-    private float stock;
+    public float stock;
 
     // Empty constructor required for DB Flow
     public Storehouse() {
