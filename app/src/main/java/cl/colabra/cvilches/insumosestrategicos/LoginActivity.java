@@ -258,12 +258,14 @@ public class LoginActivity extends AppCompatActivity {
                     JSONArray storeHouseArray = response.getJSONObject("d").getJSONArray("results");
                     for (int i = 0; i < storeHouseArray.length(); i++) {
                         JSONObject jsonObject = storeHouseArray.getJSONObject(i);
+                        String lastReading = jsonObject.optString("Ultima_Lectura", "");
+                        lastReading = lastReading.equals("null") ? "Ninguna" : lastReading;
                         Storehouse storehouse = new Storehouse(
                                 jsonObject.getLong("ID"),
                                 jsonObject.getString("Desc_Almacen"),
                                 Float.parseFloat(jsonObject.getString("Porcentaje_Stock")),
                                 jsonObject.getString("Semaforo_Stock"),
-                                jsonObject.optString("Ultima_Lectura", ""),
+                                lastReading,
                                 Float.parseFloat(jsonObject.getString("Capacidad_Real")),
                                 Float.parseFloat(jsonObject.getString("Factor_Lim_Amarillo")),
                                 Float.parseFloat(jsonObject.getString("Lim_Amarillo")),
