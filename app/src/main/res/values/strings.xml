@@ -41,5 +41,6 @@
     <string name="title_activity_record_stock">2. Registrar Stock</string>
     <string name="no_records_data_message">No hay registros pendientes, para registrar stock debes crear un plan diario</string>
     <string name="no_registers_data">No hay registros pendientes. Debe crear un plan diario.</string>
+    <string name="title_activity_record_stock_detail">Formulario de Registro</string>
 
 </resources>
