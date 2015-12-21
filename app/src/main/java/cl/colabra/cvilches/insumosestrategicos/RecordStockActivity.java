@@ -4,28 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RelativeLayout;
 
-import java.util.List;
-
-import cl.colabra.cvilches.insumosestrategicos.model.Register;
-import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
 public class RecordStockActivity extends AppCompatActivity {
 
-    private SessionManager sessionManager;
-
-    private List<Register> registerList;
-    private List<Storehouse> storehouseList;
-
-    private RelativeLayout vLoadingLayout;
-    private RelativeLayout vNoDataLayout;
-    private RecyclerView vRegistersList;
+    private SessionManager mSessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,28 +22,12 @@ public class RecordStockActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Set the loading data layout
-        vLoadingLayout = (RelativeLayout) findViewById(R.id.loading_layout);
-        vNoDataLayout = (RelativeLayout) findViewById(R.id.no_data_layout);
-        vRegistersList = (RecyclerView) findViewById(R.id.registers_list);
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        sessionManager = new SessionManager(this);
-
-        if (sessionManager.isLoggedIn()) {
-            if (registerList.size() == 0 || storehouseList.size() == 0) {
-
-            } else {
-
-            }
-        } else {
-            sessionManager.logoutUser();
-        }
-
+        mSessionManager = new SessionManager(this);
     }
 
     @Override
@@ -70,7 +41,7 @@ public class RecordStockActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_logout:
-                sessionManager.logoutUser();
+                mSessionManager.logoutUser();
                 startLoginActivity();
                 return true;
             default:
@@ -83,6 +54,4 @@ public class RecordStockActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
-
 }
