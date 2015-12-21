@@ -54,7 +54,7 @@ public class Storehouse extends BaseModel {
 
     // Empty constructor required for DB Flow
     public Storehouse() {
-
+        this.registerList = new ArrayList<>();
     }
 
     public Storehouse(long id, String description, float percentageStock, String stockLight,
@@ -71,7 +71,6 @@ public class Storehouse extends BaseModel {
         this.hardCap = hardCap;
         this.hardCapCapacity = hardCapCapacity;
         this.stock = stock;
-        this.registerList = new ArrayList<>();
     }
 
     public long getId() {
