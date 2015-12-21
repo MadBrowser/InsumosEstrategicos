@@ -39,13 +39,13 @@ public class Register extends BaseModel {
     public ForeignKeyContainer<Storehouse> storehouseFKContainer;
     @Column
     @PrimaryKey(autoincrement = true)
-    public long id;
+    private long id;
     @Column
-    public String status;
+    private String status;
     @Column
-    public String comment;
+    private String comment;
     @Column
-    public float stock;
+    private float stock;
 
     // Empty constructor required for DB Flow
     public Register() {
