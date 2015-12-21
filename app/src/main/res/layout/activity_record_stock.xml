@@ -22,9 +22,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/loading_data"/>
-
-    <include layout="@layout/no_data"/>
-
+    <include layout="@layout/record_stock_content"/>
 
 </android.support.design.widget.CoordinatorLayout>
