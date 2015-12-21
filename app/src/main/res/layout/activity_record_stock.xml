@@ -24,6 +24,7 @@
 
     <include layout="@layout/loading_data"/>
 
+    <include layout="@layout/no_data"/>
 
 
 </android.support.design.widget.CoordinatorLayout>
