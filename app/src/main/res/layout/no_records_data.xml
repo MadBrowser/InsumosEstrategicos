@@ -5,24 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:showIn="@layout/content_record_stock">
+    android:visibility="gone"
+    tools:showIn="@layout/content_record_stock"
+    >
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/loading_message"
+        android:layout_above="@+id/no_record_data_message"
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
         android:src="@drawable/collahuasi_logo"/>
 
     <TextView
-        android:id="@+id/loading_message"
+        android:id="@+id/no_record_data_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/loading_progress"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_margin="8dp"
-        android:text="@string/loading_message"
+        android:gravity="center_horizontal"
+        android:text="@string/no_records_data_message"
         android:textSize="@dimen/default_text_size"/>
 
 </RelativeLayout>

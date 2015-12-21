@@ -50,6 +50,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cl.colabra.cvilches.insumosestrategicos.LandingActivity"/>
         </activity>
+        <activity
+            android:name=".RecordStock"
+            android:label="@string/title_activity_record_stock"
+            android:parentActivityName=".LandingActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cl.colabra.cvilches.insumosestrategicos.LandingActivity"/>
+        </activity>
     </application>
 
 </manifest>
