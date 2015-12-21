@@ -82,7 +82,7 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void startRegisterListActivity() {
-        Intent intent = new Intent(this, RecordStockActivity.class);
+        Intent intent = new Intent(this, RecordStockListActivity.class);
         startActivity(intent);
     }
 }

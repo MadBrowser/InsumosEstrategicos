@@ -51,7 +51,7 @@
                 android:value="cl.colabra.cvilches.insumosestrategicos.LandingActivity"/>
         </activity>
         <activity
-            android:name=".RecordStockActivity"
+            android:name=".RecordStockListActivity"
             android:label="@string/title_activity_record_stock"
             android:parentActivityName=".LandingActivity"
             android:theme="@style/AppTheme">

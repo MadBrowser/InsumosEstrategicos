@@ -40,7 +40,7 @@ import cl.colabra.cvilches.insumosestrategicos.model.Storehouse;
 import cl.colabra.cvilches.insumosestrategicos.utils.DividerItemDecoration;
 import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
-public class RecordStockActivity extends AppCompatActivity {
+public class RecordStockListActivity extends AppCompatActivity {
 
     private SessionManager mSessionManager;
 
@@ -147,12 +147,12 @@ public class RecordStockActivity extends AppCompatActivity {
         // Fixed Size
         vRecyclerView.setHasFixedSize(true);
         // Adapter
-        RegisterAdapter mAdapter = new RegisterAdapter(this, mRegisters, mStorehouses);
+        RegisterAdapter mAdapter = new RegisterAdapter(this, mStorehouses);
         vRecyclerView.setAdapter(mAdapter);
         // Show progress
         showProgress(false);
         // Show Toast
-        Toast.makeText(RecordStockActivity.this, R.string.message_select_register,
+        Toast.makeText(RecordStockListActivity.this, R.string.message_select_register,
                 Toast.LENGTH_LONG).show();
     }
 
@@ -189,17 +189,20 @@ public class RecordStockActivity extends AppCompatActivity {
         }
     }
 
+    private void startDetailActivity(int position) {
+        long registerId = this.mRegisters.get(position).getId();
+        long storehouseId = this.mStorehouses.get(position).getId();
+
+    }
+
     public class RegisterAdapter extends RecyclerView.Adapter<RegisterAdapter.RegisterViewHolder> {
 
         private Context mContext;
-        private List<Register> mRegisters;
         private List<Storehouse> mStorehouses;
         private TextDrawable.IBuilder mDrawableBuilder;
 
-        public RegisterAdapter(Context mContext, List<Register> mRegisters,
-                               List<Storehouse> mStorehouses) {
+        public RegisterAdapter(Context mContext, List<Storehouse> mStorehouses) {
             this.mContext = mContext;
-            this.mRegisters = mRegisters;
             this.mStorehouses = mStorehouses;
             this.mDrawableBuilder = TextDrawable.builder()
                     .beginConfig()
@@ -227,7 +230,7 @@ public class RecordStockActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return mRegisters.size();
+            return this.mStorehouses.size();
         }
 
         private String getStockString(Storehouse storehouse) {
@@ -266,7 +269,7 @@ public class RecordStockActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // Iniciar actividad con formulario de detalle
+                startDetailActivity(getAdapterPosition());
             }
         }
     }
