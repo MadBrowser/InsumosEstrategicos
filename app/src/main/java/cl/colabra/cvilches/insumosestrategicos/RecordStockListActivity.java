@@ -42,6 +42,8 @@ import cl.colabra.cvilches.insumosestrategicos.utils.SessionManager;
 
 public class RecordStockListActivity extends AppCompatActivity {
 
+    public static final String EXTRA_REGISTER_ID = "cl.colabra.insumosestratégicos.REGISTER_ID";
+
     private SessionManager mSessionManager;
 
     private DailyPlan mDailyPlan;
@@ -191,8 +193,9 @@ public class RecordStockListActivity extends AppCompatActivity {
 
     private void startDetailActivity(int position) {
         long registerId = this.mRegisters.get(position).getId();
-        long storehouseId = this.mStorehouses.get(position).getId();
-
+        Intent intent = new Intent(this, RecordStockDetailActivity.class);
+        intent.putExtra(EXTRA_REGISTER_ID, registerId);
+        startActivity(intent);
     }
 
     public class RegisterAdapter extends RecyclerView.Adapter<RegisterAdapter.RegisterViewHolder> {

@@ -13,4 +13,14 @@
     tools:context="cl.colabra.cvilches.insumosestrategicos.RecordStockDetailActivity"
     tools:showIn="@layout/activity_record_stock_detail">
 
+    <!-- Descripción del Insumo -->
+    <!-- Capacidad del Almacén -->
+    <!-- % Límite Amarillo -->
+    <!-- % Límite Rojo -->
+
+    <!-- Último Stock Registrado -->
+    <!-- Nuevo Stock a Registrar -->
+
+    <!-- Comentarios -->
+
 </RelativeLayout>
